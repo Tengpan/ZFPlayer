@@ -22,7 +22,7 @@ Before this, you used ZFPlayer, are you worried about encapsulating avplayer ins
 
 ## Requirements
 
-- iOS 7+
+- iOS 8+
 - Xcode 8+
 
 ## Installation
