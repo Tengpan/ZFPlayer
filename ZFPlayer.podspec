@@ -17,8 +17,8 @@ Pod::Spec.new do |s|
     s.social_media_url = 'http://weibo.com/zifeng1300'
     s.ios.deployment_target = '8.0'
     s.requires_arc = true
-    
     s.default_subspec = 'Core'
+    s.source_files = 'ZFPlayer/Classes/ijkplayer/*.framework/Headers/*.h'
     s.public_header_files = 'ZFPlayer/Classes/ijkplayer/*.framework/Headers/*.h'
     s.ios.vendored_frameworks = 'ZFPlayer/Classes/ijkplayer/*.framework'
 
