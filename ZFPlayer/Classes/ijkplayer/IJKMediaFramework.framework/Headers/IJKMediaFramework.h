@@ -16,15 +16,15 @@ FOUNDATION_EXPORT const unsigned char IJKMediaFrameworkVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <IJKMediaFramework/PublicHeader.h>
 
-//#import <IJKMediaFramework/IJKFFMonitor.h>
-//#import <IJKMediaFramework/IJKAVMoviePlayerController.h>
-//#import <IJKMediaFramework/IJKSDLGLViewProtocol.h>
-//#import <IJKMediaFramework/IJKKVOController.h>
-//#import <IJKMediaFramework/IJKFFOptions.h>
-//#import <IJKMediaFramework/IJKMediaModule.h>
-//#import <IJKMediaFramework/IJKFFMoviePlayerController.h>
-//#import <IJKMediaFramework/IJKMediaPlayer.h>
-//#import <IJKMediaFramework/IJKMPMoviePlayerController.h>
-//#import <IJKMediaFramework/IJKMediaPlayback.h>
-//#import <IJKMediaFramework/IJKNotificationManager.h>
+#import <IJKMediaFramework/IJKFFMonitor.h>
+#import <IJKMediaFramework/IJKAVMoviePlayerController.h>
+#import <IJKMediaFramework/IJKSDLGLViewProtocol.h>
+#import <IJKMediaFramework/IJKKVOController.h>
+#import <IJKMediaFramework/IJKFFOptions.h>
+#import <IJKMediaFramework/IJKMediaModule.h>
+#import <IJKMediaFramework/IJKFFMoviePlayerController.h>
+#import <IJKMediaFramework/IJKMediaPlayer.h>
+#import <IJKMediaFramework/IJKMPMoviePlayerController.h>
+#import <IJKMediaFramework/IJKMediaPlayback.h>
+#import <IJKMediaFramework/IJKNotificationManager.h>
 
