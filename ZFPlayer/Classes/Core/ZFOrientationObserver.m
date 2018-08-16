@@ -226,6 +226,96 @@
     }];
 }
 
+- (void)enterLandscapeFullScreen:(UIInterfaceOrientation)orientation animated:(BOOL)animated completionHandler:(void (^)(void))completionHandler
+{
+    if (self.fullScreenMode == ZFFullScreenModePortrait) {
+        if (completionHandler) {
+            completionHandler();
+        }
+        return;
+    }
+    _currentOrientation = orientation;
+    UIView *superview = nil;
+    CGRect frame;
+    if ([self isNeedAdaptiveiOS8Rotation]) {
+        if (UIInterfaceOrientationIsLandscape(orientation)) {
+            if (self.fullScreen) {
+                if (completionHandler) {
+                    completionHandler();
+                }
+                return;
+            }
+            superview = self.fullScreenContainerView;
+            self.fullScreen = YES;
+        } else {
+            if (!self.fullScreen) return;
+            if (self.roateType == ZFRotateTypeCell) superview = [self.cell viewWithTag:self.playerViewTag];
+            else superview = self.containerView;
+            self.fullScreen = NO;
+        }
+        if (self.orientationWillChange) self.orientationWillChange(self, self.isFullScreen);
+        [superview addSubview:self.view];
+        [UIView animateWithDuration:animated?self.duration:0 animations:^{
+            self.view.frame = superview.bounds;
+            [self.view layoutIfNeeded];
+            [self interfaceOrientation:orientation];
+        } completion:^(BOOL finished) {
+            if (self.orientationDidChanged) self.orientationDidChanged(self, self.isFullScreen);
+            if (completionHandler) {
+                completionHandler();
+            }
+        }];
+        return;
+    }
+    
+    if (UIInterfaceOrientationIsLandscape(orientation)) {
+        superview = self.fullScreenContainerView;
+        if (!self.isFullScreen) { /// It's not set from the other side of the screen to this side
+            self.view.frame = [self.view convertRect:self.view.frame toView:superview];
+        }
+        self.fullScreen = YES;
+        /// 先加到window上，效果更好一些
+        [superview addSubview:_view];
+    } else {
+        if (self.roateType == ZFRotateTypeCell) superview = [self.cell viewWithTag:self.playerViewTag];
+        else superview = self.containerView;
+        self.fullScreen = NO;
+    }
+    frame = [superview convertRect:superview.bounds toView:self.fullScreenContainerView];
+    
+    [UIApplication sharedApplication].statusBarOrientation = orientation;
+    
+    /// 处理8.0系统键盘
+    if (SysVersion >= 8.0 && SysVersion < 9.0) {
+        NSInteger windowCount = [[[UIApplication sharedApplication] windows] count];
+        if(windowCount > 1) {
+            UIWindow *keyboardWindow = [[[UIApplication sharedApplication] windows] objectAtIndex:(windowCount-1)];
+            if (UIInterfaceOrientationIsLandscape(orientation)) {
+                keyboardWindow.bounds = CGRectMake(0, 0, MAX(ZFPlayerScreenHeight, ZFPlayerScreenWidth), MIN(ZFPlayerScreenHeight, ZFPlayerScreenWidth));
+            } else {
+                keyboardWindow.bounds = CGRectMake(0, 0, MIN(ZFPlayerScreenHeight, ZFPlayerScreenWidth), MAX(ZFPlayerScreenHeight, ZFPlayerScreenWidth));
+            }
+            keyboardWindow.transform = [self getTransformRotationAngle:orientation];
+        }
+    }
+    
+    if (self.orientationWillChange) self.orientationWillChange(self, self.isFullScreen);
+    [UIView animateWithDuration:animated?self.duration:0 animations:^{
+        self.view.transform = [self getTransformRotationAngle:orientation];
+        [UIView animateWithDuration:animated?self.duration:0 animations:^{
+            self.view.frame = frame;
+            [self.view layoutIfNeeded];
+        }];
+    } completion:^(BOOL finished) {
+        [superview addSubview:self.view];
+        self.view.frame = superview.bounds;
+        if (self.orientationDidChanged) self.orientationDidChanged(self, self.isFullScreen);
+        if (completionHandler) {
+            completionHandler();
+        }
+    }];
+}
+
 - (void)interfaceOrientation:(UIInterfaceOrientation)orientation {
     if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
         SEL selector = NSSelectorFromString(@"setOrientation:");
@@ -293,11 +383,55 @@
     }];
 }
 
+- (void)enterPortraitFullScreen:(BOOL)fullScreen animated:(BOOL)animated completionHandler:(void (^)(void))completionHandler {
+    if (self.fullScreenMode == ZFFullScreenModeLandscape) {
+        if (completionHandler) {
+            completionHandler();
+        }
+        return;
+    }
+    UIView *superview = nil;
+    if (fullScreen) {
+        superview = self.fullScreenContainerView;
+        self.view.frame = [self.view convertRect:self.view.frame toView:superview];
+        [superview addSubview:self.view];
+        self.fullScreen = YES;
+    } else {
+        if (self.roateType == ZFRotateTypeCell) {
+            superview = [self.cell viewWithTag:self.playerViewTag];
+        } else {
+            superview = self.containerView;
+        }
+        self.fullScreen = NO;
+    }
+    if (self.orientationWillChange) self.orientationWillChange(self, self.isFullScreen);
+    CGRect frame = [superview convertRect:superview.bounds toView:self.fullScreenContainerView];
+    [UIView animateWithDuration:animated?self.duration:0 animations:^{
+        self.view.frame = frame;
+        [self.view layoutIfNeeded];
+    } completion:^(BOOL finished) {
+        [superview addSubview:self.view];
+        self.view.frame = superview.bounds;
+        if (self.orientationDidChanged) self.orientationDidChanged(self, self.isFullScreen);
+        if (completionHandler) {
+            completionHandler();
+        }
+    }];
+}
+
 - (void)exitFullScreenWithAnimated:(BOOL)animated {
     if (self.fullScreenMode == ZFFullScreenModeLandscape) {
         [self enterLandscapeFullScreen:UIInterfaceOrientationPortrait animated:animated];
     } else if (self.fullScreenMode == ZFFullScreenModePortrait) {
         [self enterPortraitFullScreen:NO animated:animated];
+    }
+}
+
+- (void)exitFullScreenWithAnimated:(BOOL)animated completionHandler:(void (^)(void))completionHandler{
+    if (self.fullScreenMode == ZFFullScreenModeLandscape) {
+        [self enterLandscapeFullScreen:UIInterfaceOrientationPortrait animated:animated completionHandler:completionHandler];
+    } else if (self.fullScreenMode == ZFFullScreenModePortrait) {
+        [self enterPortraitFullScreen:NO animated:animated completionHandler:completionHandler];
     }
 }
 

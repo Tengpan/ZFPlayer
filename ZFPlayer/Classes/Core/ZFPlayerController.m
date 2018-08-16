@@ -285,10 +285,17 @@
     [self.notification removeNotification];
     [self.orientationObserver removeDeviceOrientationObserver];
     if (self.isFullScreen) {
-        [self.orientationObserver exitFullScreenWithAnimated:NO];
+        @weakify(self)
+        [self.orientationObserver exitFullScreenWithAnimated:NO completionHandler:^{
+            @strongify(self)
+            [self.currentPlayerManager stop];
+            [self.currentPlayerManager.view removeFromSuperview];
+        }];
     }
-    [self.currentPlayerManager stop];
-    [self.currentPlayerManager.view removeFromSuperview];
+    else {
+        [self.currentPlayerManager stop];
+        [self.currentPlayerManager.view removeFromSuperview];
+    }
 }
 
 - (void)replaceCurrentPlayerManager:(id<ZFPlayerMediaPlayback>)playerManager {
