@@ -21,7 +21,6 @@ Pod::Spec.new do |s|
     s.source_files = 'ZFPlayer/Classes/ijkplayer/*.framework/Headers/*.h'
     s.public_header_files = 'ZFPlayer/Classes/ijkplayer/*.framework/Headers/*.h'
     s.ios.vendored_frameworks = 'ZFPlayer/Classes/ijkplayer/*.framework'
-    s.static_framework = true
 
     s.subspec 'Core' do |core|
         core.source_files = 'ZFPlayer/Classes/Core/**/*'
