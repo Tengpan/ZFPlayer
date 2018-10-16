@@ -11,7 +11,6 @@
 #import <ZFPlayer/ZFAVPlayerManager.h>
 #import <ZFPlayer/ZFPlayerControlView.h>
 #import <ZFPlayer/ZFIJKPlayerManager.h>
-#import <ZFPlayer/KSMediaPlayerManager.h>
 #import "ZFUtilities.h"
 #import "ZFTableViewCell.h"
 #import "ZFTableData.h"

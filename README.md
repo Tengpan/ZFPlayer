@@ -1,6 +1,6 @@
 
 <p align="center">
-<img src="https://upload-images.jianshu.io/upload_images/635942-092427e571756309.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="ZFPlayer" title="ZFPlayer" width="557"/>
+<img src="https://upload-images.jianshu.io/upload_images/635942-092427e571756an309.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="ZFPlayer" title="ZFPlayer" width="557"/>
 </p>
 
 <p align="center">
